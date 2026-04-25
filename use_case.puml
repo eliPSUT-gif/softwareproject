@@ -1,0 +1,72 @@
+@startuml use_case
+left to right direction
+title Use Case Diagram – Flight Booking System
+
+actor "Customer" as C
+actor "Airline Administrator" as AA
+actor "System Administrator" as SA
+actor "Payment Gateway" as PG #lightgrey
+actor "Notification Service" as NS #lightgrey
+
+rectangle "Flight Booking System" {
+
+    ' Customer use cases
+    usecase "Register / Login" as UC1
+    usecase "Search Flights" as UC2
+    usecase "View Flight Details" as UC3
+    usecase "Select Seat" as UC4
+    usecase "Book Flight" as UC5
+    usecase "Make Payment" as UC6
+    usecase "Receive E-Ticket" as UC7
+    usecase "View / Manage Booking" as UC8
+    usecase "Cancel Booking" as UC9
+    usecase "Download E-Ticket" as UC10
+
+    ' Airline Admin use cases
+    usecase "Manage Flights" as UC11
+    usecase "Update Schedule" as UC12
+    usecase "Manage Seat Availability" as UC13
+    usecase "View Booking Statistics" as UC14
+    usecase "Generate Reports" as UC15
+
+    ' System Admin use cases
+    usecase "Manage Users" as UC16
+    usecase "Monitor System" as UC17
+    usecase "Configure Settings" as UC18
+}
+
+' Customer relationships
+C --> UC1
+C --> UC2
+C --> UC3
+C --> UC5
+C --> UC8
+C --> UC9
+C --> UC10
+
+' Include relationships
+UC5 ..> UC1 : <<include>>
+UC5 ..> UC2 : <<include>>
+UC5 ..> UC4 : <<include>>
+UC5 ..> UC6 : <<include>>
+UC6 ..> UC7 : <<include>>
+UC9 ..> UC8 : <<include>>
+UC3 ..> UC2 : <<extend>>
+
+' Admin relationships
+AA --> UC11
+AA --> UC12
+AA --> UC13
+AA --> UC14
+AA --> UC15
+
+' System admin
+SA --> UC16
+SA --> UC17
+SA --> UC18
+
+' External actors
+UC6 --> PG
+UC7 --> NS
+
+@enduml

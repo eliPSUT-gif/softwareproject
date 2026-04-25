@@ -1,0 +1,47 @@
+@startuml activity_swimlane
+title Activity Diagram – Flight Booking Process
+
+|Customer|
+start
+:Search for available flights\n(origin, destination, date, passengers);
+
+|Flight Booking System|
+:Query flight database\nfor matching results;
+:Return list of available flights;
+
+|Customer|
+:Browse and select a flight;
+:Choose seat(s);
+:Enter passenger details;
+:Proceed to payment;
+
+|Flight Booking System|
+:Validate passenger details;
+:Reserve selected seat(s) temporarily;
+:Forward payment request to gateway;
+
+|Payment Gateway|
+:Process payment transaction;
+if (Payment successful?) then (yes)
+  :Return success + transaction ID;
+else (no)
+  :Return failure reason;
+  |Flight Booking System|
+  :Release reserved seat(s);
+  |Customer|
+  :Display payment error;
+  stop
+endif
+
+|Flight Booking System|
+:Confirm booking;
+:Generate e-ticket with unique booking ID;
+:Store booking record in database;
+:Trigger notification service;
+
+|Customer|
+:Receive booking confirmation\n(email/SMS with e-ticket);
+:View booking details in account;
+stop
+
+@enduml
