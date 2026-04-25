@@ -1,0 +1,39 @@
+@startuml c4_container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title C4 Level 2 – Container Diagram: Flight Booking System
+
+Person(customer, "Customer", "Books and manages flight reservations.")
+Person(airline_admin, "Airline Administrator", "Manages flights and operations.")
+Person(sys_admin, "System Administrator", "Manages users and system settings.")
+
+System_Boundary(fbs, "Flight Booking System") {
+    Container(web_app, "Web Application", "React.js", "Provides the customer-facing interface for searching and booking flights.")
+    Container(admin_portal, "Admin Portal", "React.js", "Provides the interface for airline admins and system admins to manage operations.")
+    Container(api_server, "API Server", "Node.js / REST API", "Core business logic: handles flight search, booking, payment orchestration, and user management.")
+    ContainerDb(database, "Database", "PostgreSQL", "Stores users, flights, bookings, seat maps, transactions, and booking history.")
+    Container(notif_container, "Notification Service", "Node.js / Mailer", "Generates and sends e-tickets and booking confirmations.")
+    Container(sync_service, "Airline Data Sync Service", "Python / Scheduler", "Periodically syncs flight schedules and availability from external airline databases.")
+}
+
+System_Ext(payment_gw, "Payment Gateway", "Stripe / PayPal – processes payments.")
+System_Ext(ext_notif, "Email / SMS Provider", "SendGrid / Twilio.")
+System_Ext(airline_db, "Airline Database", "External airline data source.")
+
+Rel(customer, web_app, "Uses", "HTTPS")
+Rel(airline_admin, admin_portal, "Uses", "HTTPS")
+Rel(sys_admin, admin_portal, "Uses", "HTTPS")
+
+Rel(web_app, api_server, "API calls", "HTTPS/JSON")
+Rel(admin_portal, api_server, "API calls", "HTTPS/JSON")
+
+Rel(api_server, database, "Reads/Writes", "SQL")
+Rel(api_server, payment_gw, "Processes payments", "HTTPS/REST")
+Rel(api_server, notif_container, "Triggers notifications", "Internal")
+Rel(notif_container, ext_notif, "Sends email/SMS", "HTTPS/REST")
+Rel(sync_service, airline_db, "Fetches flight data", "HTTPS/REST")
+Rel(sync_service, database, "Updates flight records", "SQL")
+
+@enduml
