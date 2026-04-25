@@ -1,0 +1,31 @@
+@startuml sequence_highlevel
+title High-Level Sequence Diagram – Flight Booking (Stakeholder View)
+
+actor Customer
+participant "Flight Booking\nSystem" as FBS
+participant "Payment\nGateway" as PG
+participant "Notification\nService" as NS
+database "Airline\nDatabase" as ADB
+
+== Search Phase ==
+Customer -> FBS : Search flights (origin, destination, date)
+FBS -> ADB : Request available flights
+ADB --> FBS : Return matching flights
+FBS --> Customer : Display flight results
+
+== Booking Phase ==
+Customer -> FBS : Select flight + seat + enter passenger details
+FBS --> Customer : Show booking summary & total price
+Customer -> FBS : Confirm booking
+
+== Payment Phase ==
+FBS -> PG : Process payment (amount, customer info)
+PG --> FBS : Payment confirmed (transaction ID)
+
+== Confirmation Phase ==
+FBS -> ADB : Update seat availability
+FBS -> NS : Send e-ticket and confirmation
+NS --> Customer : Email / SMS with e-ticket
+FBS --> Customer : Display booking confirmation
+
+@enduml

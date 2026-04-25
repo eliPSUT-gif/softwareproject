@@ -1,0 +1,64 @@
+@startuml sequence_detailed
+title Detailed Sequence Diagram – Flight Booking (Developer View)
+
+actor Customer
+participant "Web App\n(React)" as WA
+participant "API Server\n(Node.js)" as API
+database "Database\n(PostgreSQL)" as DB
+participant "Payment Gateway\n(Stripe)" as PG
+participant "Notification Service\n(Mailer)" as NS
+
+== Authentication ==
+Customer -> WA : Enter credentials
+WA -> API : POST /api/auth/login\n{email, password}
+API -> DB : SELECT user WHERE email = ?
+DB --> API : User record
+API --> WA : 200 OK {JWT token}
+WA --> Customer : Redirect to search page
+
+== Flight Search ==
+Customer -> WA : Enter search params\n(origin, dest, date, passengers)
+WA -> API : GET /api/flights\n?origin=&destination=&date=&seats=
+API -> DB : SELECT flights WHERE origin=? AND destination=?\nAND date=? AND available_seats >= ?
+DB --> API : List of flight records
+API --> WA : 200 OK {flights: [...]}
+WA --> Customer : Render flight listings
+
+== Seat Selection & Booking Initiation ==
+Customer -> WA : Select flight + seat(s)
+WA -> API : GET /api/flights/{flightId}/seats
+API -> DB : SELECT seats WHERE flight_id=? AND status='available'
+DB --> API : Seat map data
+API --> WA : 200 OK {seats: [...]}
+WA --> Customer : Display seat map
+Customer -> WA : Choose seat(s) + enter passenger info
+WA -> API : POST /api/bookings/initiate\n{flightId, seatIds, passengers, userId}
+API -> DB : UPDATE seats SET status='reserved'\nWHERE seat_id IN (?) — temp hold
+DB --> API : Rows updated
+API --> WA : 200 OK {bookingSession, totalAmount}
+WA --> Customer : Show payment page
+
+== Payment ==
+Customer -> WA : Enter payment details
+WA -> API : POST /api/payments\n{bookingSession, cardToken, amount}
+API -> PG : POST /v1/charges\n{amount, currency, source: cardToken}
+PG --> API : 200 OK {chargeId, status: "succeeded"}
+
+== Booking Confirmation ==
+API -> DB : INSERT INTO bookings\n(userId, flightId, seatIds, amount, transactionId)
+API -> DB : UPDATE seats SET status='booked' WHERE seat_id IN (?)
+DB --> API : Booking record created
+API -> NS : POST /notify\n{userId, email, bookingId, eTicketData}
+NS --> Customer : Email: E-ticket + booking confirmation
+API --> WA : 200 OK {bookingId, eTicketUrl}
+WA --> Customer : Display confirmation page + download link
+
+== Payment Failure Handling ==
+note over API, PG #ffaaaa
+  If PG returns failure:
+  API -> DB : UPDATE seats SET status='available'
+  API --> WA : 402 Payment Failed {reason}
+  WA --> Customer : Show error, allow retry
+end note
+
+@enduml
