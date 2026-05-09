@@ -1,0 +1,74 @@
+@startuml
+skinparam shadowing false
+skinparam linetype ortho
+skinparam rectangle {
+  BackgroundColor #E8F3FF
+  BorderColor #1F4E79
+}
+skinparam database {
+  BackgroundColor #F6F6F6
+  BorderColor #555555
+}
+
+title DFD Level 1 - Flight Booking System
+
+actor Customer
+actor "Airline Administrator" as AirlineAdmin
+actor "System Administrator" as SystemAdmin
+actor "Payment Gateway" as PaymentGateway
+actor "Email / SMS Provider" as EmailProvider
+actor "Airline Database" as AirlineDB
+
+database "D1 Users" as D1
+database "D2 Flights & Seats" as D2
+database "D3 Bookings" as D3
+database "D4 Payments" as D4
+database "D5 Notifications" as D5
+
+rectangle "1.0 Manage User Access" as P1
+rectangle "2.0 Search Flights" as P2
+rectangle "3.0 Manage Booking" as P3
+rectangle "4.0 Process Payment" as P4
+rectangle "5.0 Issue Ticket & Notify" as P5
+rectangle "6.0 Manage Airline Operations" as P6
+rectangle "7.0 Monitor System" as P7
+
+Customer --> P1 : login / register data
+P1 --> D1 : create / validate user
+D1 --> P1 : user record
+P1 --> Customer : authentication result
+
+Customer --> P2 : origin, destination, date, passengers
+P2 --> D2 : read available flights / seats
+AirlineDB --> P2 : synced flight data
+P2 --> Customer : flight results
+
+Customer --> P3 : selected flight, seats, passenger details
+P3 --> D2 : reserve/release seats
+P3 --> D3 : create/update booking
+D3 --> P3 : booking status
+P3 --> Customer : booking summary
+
+P3 --> P4 : payment amount + booking ID
+Customer --> P4 : payment details
+P4 --> PaymentGateway : payment request
+PaymentGateway --> P4 : transaction result
+P4 --> D4 : store transaction
+P4 --> P3 : success / failure
+
+P3 --> P5 : confirmed booking data
+P5 --> D5 : store notification log
+P5 --> EmailProvider : send e-ticket / SMS
+P5 --> Customer : confirmation + e-ticket
+
+AirlineAdmin --> P6 : flight schedule / seat updates
+P6 --> D2 : update flights and seats
+P6 --> D3 : read booking statistics
+P6 --> AirlineAdmin : reports / statistics
+
+SystemAdmin --> P7 : configuration / monitoring request
+P7 --> D1 : manage users
+P7 --> D3 : monitor booking records
+P7 --> D4 : monitor payment records
+P7 --> SystemAdmin : system dashboard
+@enduml
