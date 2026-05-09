@@ -8,31 +8,31 @@
 |---|---|
 | **Group Number** | Group 09 |
 | **Case Study** | Flight Booking System |
-| **Course** | Software Engineering – Winter 2026 |
+| **Course** | Software Engineering - Winter 2026 |
 | **Instructor** | Samer ElKababji |
 
 ### Team Members
 
-| Name 		| Student ID |
-|-------|-------|
-| Elias Hreish	 | 20220677 |
+| Name | Student ID |
+|---|---|
+| Elias Hreish | 20220677 |
 | Ghaith Hajarat | 20220445 |
-| Faris Samara   | 20220553 |
-| Ahmad Abed     | 20220976 |
+| Faris Samara | 20220553 |
+| Ahmad Abed | 20220976 |
 
 ---
 
 ## 2. Overview
 
 ### System Purpose
-A web-based and database-driven platform that enables users to search, book, and manage flight reservations. The system allows customers to browse available flights, select seats, make online payments, and receive electronic tickets. Airlines and administrators can update flight schedules, manage seat availability, and track booking statistics in real time.
+A web-based and database-driven platform that enables users to search, book, and manage flight reservations. Customers can browse available flights, select seats, make online payments, and receive electronic tickets. Airline administrators manage flight schedules and seat availability, while system administrators monitor users and system settings.
 
 ### Tools Used
-- **PlantUML** – UML and C4 diagram generation
-- **Draw.io** – Supplementary diagram editing
-- **Visual Studio Code** – Primary IDE
-- **Git / GitHub** – Version control and collaboration
-- **Pandoc** – Markdown to PDF conversion
+- PlantUML - UML and C4 diagram source files
+- Draw.io - Supplementary diagram editing
+- Visual Studio Code - Primary IDE
+- Git / GitHub - Version control and collaboration
+- Pandoc - Markdown to PDF conversion
 
 ---
 
@@ -40,30 +40,34 @@ A web-based and database-driven platform that enables users to search, book, and
 
 | Diagram | File | Description |
 |---|---|---|
-| C4 Level 1 – Context | `uml/c4_context.puml` | Shows the system and all external actors/systems it interacts with |
-| C4 Level 2 – Container | `uml/c4_container.puml` | Shows internal containers (web app, API, database, services) |
-| Activity Diagram (Swimlanes) | `uml/activity_swimlane.puml` | High-level booking process across Customer, System, and Payment Gateway |
-| Use Case Diagram | `uml/use_case.puml` | All system use cases for Customer, Airline Admin, and System Admin |
-| Sequence Diagram – High Level | `uml/sequence_highlevel.puml` | Stakeholder-level interaction for the flight booking flow |
-| Sequence Diagram – Detailed | `uml/sequence_detailed.puml` | Developer-level technical interaction with API calls and DB operations |
+| C4 Level 1 - Context | `uml/c4_context.puml` | Shows the system boundary and external actors/systems |
+| C4 Level 2 - Container | `uml/c4_container.puml` | Shows internal containers such as web app, API server, database, and services |
+| Activity Diagram with Swimlanes | `uml/activity_swimlane.puml` | Shows the booking workflow across Customer, System, and Payment Gateway |
+| Use Case Diagram | `uml/use_case.puml` | Shows system use cases for Customer, Airline Admin, and System Admin |
+| High-Level Sequence Diagram | `uml/sequence_highlevel.puml` | Shows stakeholder-level flight booking interaction |
+| Detailed Sequence Diagram | `uml/sequence_detailed.puml` | Shows developer-level API, database, payment, and notification flow |
+| Class Diagram | `uml/class_diagram.puml` | Shows system classes, attributes, operations, associations, inheritance, aggregation, and composition |
+| DFD Level 1 | `uml/dfd_level1.puml` | Shows data flow between users, processes, data stores, and external systems |
 
 ---
 
 ## 4. Repo Structure
 
-```
+```text
 /
-├── README.md                  # This file (also serves as report title page)
+├── README.md
 ├── docs/
-│   ├── report.md              # Full project report in Markdown
-│   └── report.pdf             # Final compiled PDF report
+│   ├── report.md
+│   └── se_report_group_09.pdf
 └── uml/
-    ├── c4_context.puml        # C4 Level 1 – Context Diagram
-    ├── c4_container.puml      # C4 Level 2 – Container Diagram
-    ├── activity_swimlane.puml # Activity Diagram with swimlanes
-    ├── use_case.puml          # Use Case Diagram
-    ├── sequence_highlevel.puml# High-level Sequence Diagram
-    └── sequence_detailed.puml # Detailed Sequence Diagram
+    ├── c4_context.puml / c4_context.png
+    ├── c4_container.puml / c4_container.png
+    ├── activity_swimlane.puml / activity_swimlane.png
+    ├── use_case.puml / use_case.png
+    ├── sequence_highlevel.puml / sequence_highlevel.png
+    ├── sequence_detailed.puml / sequence_detailed.png
+    ├── class_diagram.puml / class_diagram.png
+    └── dfd_level1.puml / dfd_level1.png
 ```
 
 ---
@@ -72,7 +76,7 @@ A web-based and database-driven platform that enables users to search, book, and
 
 | Member | Role | Commits |
 |---|---|---|
-| [Member 1] | [e.g., C4 Diagrams, Report] | [N] |
-| [Member 2] | [e.g., Use Case + Sequence Diagrams] | [N] |
-| [Member 3] | [e.g., Activity Diagram, README] | [N] |
-| [Member 4] | [e.g., System Description, Review] | [N] |
+| Elias Hreish | C4 context diagram, C4 container diagram, and architecture review | 1 |
+| Ghaith Hajarat | Use case diagram, use case descriptions, and interaction review | 1 |
+| Faris Samara | High-level sequence diagram, detailed sequence diagram, and final report organization | 1 |
+| Ahmad Abed | Activity diagram, class diagram, DFD, README, and final documentation review | 1 |
