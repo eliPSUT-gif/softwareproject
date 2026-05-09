@@ -1,0 +1,26 @@
+@startuml c4_context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title C4 Level 1 – Context Diagram: Flight Booking System
+
+Person(customer, "Customer", "Searches, books, and manages flight reservations online.")
+Person(airline_admin, "Airline Administrator", "Manages flights, schedules, seat availability, and booking statistics.")
+Person(sys_admin, "System Administrator", "Manages users, monitors system health, and configures settings.")
+
+System(fbs, "Flight Booking System", "Enables customers to search and book flights, and allows admins to manage airline operations.")
+
+System_Ext(payment_gw, "Payment Gateway", "Processes online payments and handles transaction verification (e.g., Stripe, PayPal).")
+System_Ext(notif_svc, "Notification Service", "Sends booking confirmations, e-tickets, and alerts via email or SMS.")
+System_Ext(airline_db, "Airline Database", "External airline data source providing real-time flight schedules and availability.")
+
+Rel(customer, fbs, "Searches flights, books seats, makes payments, manages reservations", "HTTPS")
+Rel(airline_admin, fbs, "Manages flights, updates schedules, views statistics", "HTTPS")
+Rel(sys_admin, fbs, "Administers users and system configuration", "HTTPS")
+
+Rel(fbs, payment_gw, "Processes payments and refunds", "HTTPS/REST")
+Rel(fbs, notif_svc, "Sends e-tickets and booking notifications", "HTTPS/REST")
+Rel(fbs, airline_db, "Fetches and syncs flight data", "HTTPS/REST")
+
+@enduml
