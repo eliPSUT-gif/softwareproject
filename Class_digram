@@ -1,1 +1,153 @@
+@startuml
+title Class Diagram - Flight Booking System
 
+abstract class User {
+  - userId: int
+  - fullName: string
+  - email: string
+  - passwordHash: string
+  - phone: string
+  - status: string
+  + login(email, password): boolean
+  + logout(): void
+  + updateProfile(): void
+}
+
+class Customer {
+  - passportNumber: string
+  - loyaltyPoints: int
+  + searchFlights(): List<Flight>
+  + bookFlight(): Booking
+  + cancelBooking(bookingId): void
+  + downloadETicket(bookingId): ETicket
+}
+
+abstract class Administrator {
+  - adminLevel: string
+  + viewDashboard(): void
+}
+
+class AirlineAdministrator {
+  - airlineId: int
+  + addFlight(flight): void
+  + updateSchedule(flightId): void
+  + manageSeatAvailability(flightId): void
+  + viewBookingStatistics(): Report
+}
+
+class SystemAdministrator {
+  + manageUsers(): void
+  + monitorSystem(): void
+  + configureSettings(): void
+}
+
+class Airline {
+  - airlineId: int
+  - name: string
+  - code: string
+  + getFlightSchedule(): List<Flight>
+}
+
+class Airport {
+  - airportId: int
+  - name: string
+  - code: string
+  - city: string
+  - country: string
+}
+
+class Flight {
+  - flightId: int
+  - flightNumber: string
+  - departureTime: datetime
+  - arrivalTime: datetime
+  - status: string
+  - basePrice: decimal
+  + checkAvailability(): boolean
+  + updateStatus(status): void
+}
+
+class Seat {
+  - seatId: int
+  - seatNumber: string
+  - seatClass: string
+  - status: string
+  + reserve(): void
+  + release(): void
+  + markBooked(): void
+}
+
+class Booking {
+  - bookingId: int
+  - bookingDate: datetime
+  - totalAmount: decimal
+  - status: string
+  + createBooking(): void
+  + confirmBooking(): void
+  + cancelBooking(): void
+  + calculateTotal(): decimal
+}
+
+class Passenger {
+  - passengerId: int
+  - fullName: string
+  - passportNumber: string
+  - dateOfBirth: date
+  + validateDetails(): boolean
+}
+
+class PaymentTransaction {
+  - transactionId: int
+  - amount: decimal
+  - paymentMethod: string
+  - status: string
+  - gatewayReference: string
+  + processPayment(): boolean
+  + refund(): boolean
+}
+
+class ETicket {
+  - ticketId: int
+  - ticketNumber: string
+  - issueDate: datetime
+  - downloadUrl: string
+  + generateTicket(): void
+  + sendTicket(): void
+}
+
+class Notification {
+  - notificationId: int
+  - channel: string
+  - message: string
+  - status: string
+  + sendEmail(): void
+  + sendSMS(): void
+}
+
+class Report {
+  - reportId: int
+  - reportType: string
+  - generatedAt: datetime
+  + generate(): void
+}
+
+User <|-- Customer
+User <|-- Administrator
+Administrator <|-- AirlineAdministrator
+Administrator <|-- SystemAdministrator
+
+Airline o-- "0..*" Flight : owns
+Flight *-- "1..*" Seat : contains
+Flight --> "1" Airport : origin
+Flight --> "1" Airport : destination
+Customer --> "0..*" Booking : creates
+Booking --> "1" Flight : for
+Booking o-- "1..*" Seat : reserves
+Booking *-- "1..*" Passenger : passenger details
+Booking *-- "1" PaymentTransaction : payment
+Booking *-- "1" ETicket : ticket
+Booking --> "0..*" Notification : triggers
+AirlineAdministrator --> Flight : manages
+SystemAdministrator --> User : manages
+AirlineAdministrator --> Report : generates
+@enduml
